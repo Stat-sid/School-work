@@ -1,0 +1,308 @@
+
+<!-- saved from url=(0075)https://www.cse.chalmers.se/~richajo/dit866/assignments/a3/assignment3.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>Programming assignment 3: Political stance classification</title>
+    <link rel="stylesheet" type="text/css" href="./Programming assignment 3_ Political stance classification_files/assignments.css">
+
+<style>
+    pre {
+      display:inline-block;
+    }
+</style>    
+
+  <script src="./Programming assignment 3_ Political stance classification_files/jquery.min.js.nedladdning"></script><script>
+$(document).ready(function(){
+  $("button.toggler").click(function(){
+    $(this).text(function(i, text){
+          return text === "Show solution" ? "Hide solution" : "Show solution";
+      });
+    $(this).next().toggle(100);
+  });
+});
+</script></head>
+
+  
+
+
+<body>
+    <h1>Programming assignment 3: Stance classification</h1>
+
+<p>
+In this assignment, you will solve a supervised machine learning task and write a report that describes your solution. The data that you will use for training and evaluation will be annotated collectively by all participants in the course.
+</p>
+
+<p>
+The machine learning task that will be addressed in this assignment is to develop a text classifier that determines whether a given textual comment expresses an opinion that is positive or negative towards <a href="https://en.wikipedia.org/wiki/COVID-19_vaccine">COVID-19 vaccination</a>.
+</p>
+  
+<p>
+The first two parts of this assignment deal with data annotation and are solved <b>individually</b>. In the third and final part, you will implement the classification system, and here you will work <b>in a group of two or three people</b>.</p>
+
+<p>
+Didactic purpose of this assignment:
+</p>
+<ul>
+  <li>Getting some practical understanding of annotating data and inter-annotator agreement.</li>
+  <li>Practice several aspects of system development based on machine learning: getting data, cleaning data, processing and selecting features, selecting and tuning a model, evaluating.
+  </li><li>Analysing results in a machine learning experiment.
+  </li><li>Describing the implementation, experiments, and results in a report.
+</li></ul>
+
+<h2>Part 1: Crowdsourcing the data</h2>
+
+<p>
+Your task here is to collect at least 100 comments in English relating to COVID-19 vaccination from social media or the comment fields from online articles.
+<!--You may look at social media sites such as Youtube etc, as well as British newspapers such as-->
+Good places to trawl for comments include social media sites such as <a href="https://www.youtube.com/results?search_query=covid">Youtube</a> or the website of any English-language newspaper (that allows readers to comment).
+</p>
+
+    <p>
+      Collect comments that express a pro- or anti-vaccination stance. We will create a balanced dataset, so you should try to collect about 50 instances of each stance. <b>Do not include comments not expressing an opinion about vaccination. Also, since other annotators will see each comment in isolation, don't include comments where you need to read previous comments to understand the opinion (e.g. <em>"You're wrong!"</em>).</b>
+      Try to select comments from a variety of sources.
+    </p>
+      
+    <p>
+      Store all the comments you collected in an Excel file. This file should have two columns. The first column will store your <b>annotation</b> of whether this comment is pro-vaccination (represented as <b>1</b> in the spreadsheet) or anti-vaccination (<b>0</b> in the spreadsheet). The second column should store the text of the comment. Make sure that the text of each comment is stored in a single cell.
+      The following figure shows an example.
+    </p>
+
+<div style="background-color:#eeffff; border:1px solid #ddf0f0; padding: 5px; display: inline-block;">
+<img height="300" src="./Programming assignment 3_ Political stance classification_files/example.png">
+</div>
+
+<p>Submit the Excel file via the <a href="https://chalmers.instructure.com/courses/22288/assignments/67682">Canvas page</a>. If you have trouble using Canvas, please send your solution by email to Richard directly, with the subject line <em>Applied Machine Learning: Programming assignment 3 part 1</em>.
+</p>
+
+<p>
+<b style="color:red;">Important.</b> We will receive a large number of Excel files and they will need to be processed automatically. For this reason, it is important that you format the Excel file <em><b>exactly</b></em> as above. Don't change the labels, the column order, or add "helpful" comments or column header names, etc.
+</p>
+  
+    <p>This part of the assignment is solved <b>individually</b>.</p>
+
+<p><b>Deadline for Part 1: February 6</b></p>
+
+<h2>Part 2: Second round of annotation</h2>
+
+<p>
+After you have submitted your annotated comments, you will receive back a set of about 100 other comments. You will find these comments as an attachment to the feedback comment in Canvas. Annotate them as well, and submit the file containing your annotations.
+<b>
+If you think it's impossible to understand a comment as pro-vaccination or anti-vaccination, you can enter the value -1, which will mean "I don't know".
+</b>
+</p>
+
+<p>This part of the assignment is solved <b>individually</b>.</p>
+
+<p><b>Deadline for Part 2: February 10</b></p>
+
+<p>Again, submit the second Excel file using the <a href="https://chalmers.instructure.com/courses/22288/assignments/67684">Canvas page</a>. And again, use email if you have trouble with Canvas, this time using the subject line <em>Applied Machine Learning: Programming assignment 3 part 2</em>.
+</p>
+
+<!--<p>
+<b>Update (Feb 12): <a href="data/a3_train_final.tsv">here</a> is the full dataset, including the result of the second round of annotation.</b>
+</p>-->
+
+<h2>Part 3: Implementing your stance classification system</h2>
+
+    <p>
+      Write the code to implement a classifier that determines whether a given comment expresses a pro-vaccination or anti-vaccination stance.
+Initially, you will work with a small sample that you can use to get things set up.     
+Eventually, you will receive the full dataset: first including the result of the first annotation, and later the result of the second round. Please note that your results may change (e.g. which model performs best) when you switch from the small sample to the full dataset.
+</p>
+
+<!--<p>
+<b>NB:</b> Please make sure that it is easy to run your classifier on a test set, stored in a separate file using the same format as the training data.
+</p>-->
+
+    <p>
+In your implementation, you are free to use any machine learning approach you think could be useful: the only restrictions are 1) that you are not allowed to use existing implementations that carry out exactly this task (that is: classifying whether a text is pro- or anti-vaccine); 2) that your models should be possible to run in a stand-alone fasion (i.e. they should not use an external service).
+You may take some inspiration from the <a href="https://www.cse.chalmers.se/~richajo/dit866/lectures/l3/Vectorizers.ipynb">document classification examples shown in Lecture 3</a>. However, it is probably useful to try to improve over this solution. For instance, you may read more about the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a> and see what you can do with it. Optionally, try out a powerful modern text representation model such as <a href="https://huggingface.co/docs/transformers/model_doc/bert">BERT</a>.
+</p>      
+
+<p>
+Then write a report
+detailing your implementation, your experiments and analysis.
+In
+particular, some useful issues to discuss might include:
+</p>
+  
+<ul>
+  <li>How much consensus is there between annotators of the dataset? Do you think the data is reliable?</li>
+  <li>How do you represent your data as features?</li>
+  <li>Did you process the features in any way?</li>
+  <!--<li>Did you bring in any additional sources of data?</li>-->
+  <li>How did you select which learning algorithms to use?</li>
+  <li>Did you try to tune the hyperparameters of the learning algorithm, and in
+    that case how?</li>
+  <li>How do you evaluate the quality of your system?</li>
+  <li>How well does your system compare to a trivial baseline?</li>
+  <li>Can you say anything about the errors that the system makes?
+  For a classification task, you may consider
+  a <a href="https://scikit-learn.org/stable/modules/model_evaluation.html#confusion-matrix">confusion
+      matrix</a>. It is also probably meaningful to include selected errors and comment on what might have gone wrong.</li>
+  <li>Is it possible to say something about which features the model
+  considers important? (Whether this is possible depends on the type
+  of classifier you are using.)
+</li></ul>
+
+<p>
+The submitted report should be around 3–4 pages. Use <a href="https://www.cse.chalmers.se/~richajo/dit866/files/cth_course_template.zip">the following template</a> to write the report. It should be written as a typical technical report including sections for the introduction, method description, results, conclusion. The report should be a pdf, Word or LibreOffice document. 
+Please include the names of all the students in the group.
+</p>
+
+<p>
+The code should be a Jupyter notebook. 
+</p>
+
+<p>                                                                         
+Please use the <a href="https://chalmers.instructure.com/courses/22288/assignments/67685">Canvas page</a> to submit your solution (the code and the report). If you have trouble using Canvas, please send your solution by email to Richard directly, with the subject line <em>Applied Machine Learning: Programming assignment 3, part 3</em>.
+
+</p><p>
+  <b>Grading.</b>
+Grading will be based (1) on whether the report is insightful and lives up to professional standards of technical writing, including decent clarity, spelling, grammar, and structure, and (2) on whether the technical solutions are justified and the code well-implemented. <!--Again, based on previous experience we'd like to stress that the writing -->
+</p>
+
+<p>
+  <b style="color:red;">Clarification.</b> Your report should not be in the form of a bullet list that just goes through the discussion points listed above. It should be a typical technical report, written in a clear and readable manner.
+</p>
+  
+<p></p>
+<p><b>Deadline part 3: February 17</b></p>
+
+<h3>The datasets and their format</h3>
+
+    <p>
+      Please check this page regularly, since we will post the new datasets after they have been collected.
+    </p>
+
+<p>
+The <b>training data</b> will be stored in a text file consisting of tab-separated columns, where the first column
+contains the output labels (1 for pro-vaccination, 0 for anti-vaccination) and
+the second contains the comments. To exemplify, here are some of the examples in the sample data:
+</p>
+
+<pre>0       the vaccine is a hoax, based on lies.
+1       I will get the vaccine as soon as I can.
+1       stupid anti-vaxxers!
+0       don't believe what they tell you, it's not safe!
+</pre>
+
+<p>
+<a href="https://www.cse.chalmers.se/~richajo/dit866/data/a3_first_sample.tsv">Here</a> is a preliminary sample (1000 instances) that you can work with when you start coding. After the first round of annotation has been completed, you'll get a larger set.
+</p>
+
+<!--
+<p>
+<b style="color:red;">Update (Feb 8).</b> <a href="../../data/a3_train_round1.tsv">Here</a> is the training data (9,851 instances) after the first annotation round.
+</p>
+-->
+
+<p>
+After the second round of annotation has been carried out, we will distribute the data once again, including the annotations from all the annotators. Here is an example of how this will look. As you can see, the different annotations are separated by a slash (/). In some cases, as in the last example below, annotators may disagree.
+</p>
+
+<pre>0/0       the vaccine is a hoax, based on lies.
+1/1/1       I will get the vaccine as soon as I can.
+1/1       stupid anti-vaxxers!
+0/1       don't believe what they tell you, it's not safe!  
+</pre>
+
+<!--
+<p>
+<b style="color:red;">Update (Feb 12)</b> <a href="../../data/a3_train_final.tsv">Here</a> is the final training data after the second annotation round.
+</p>
+-->
+
+<p>
+<!--There is also a separate <b>test set</b>
+available <a href="../../data/a3_test_final.tsv">here</a>.-->
+<!--We will withhold the test set for now, and it will be released a few days before the submission deadline. -->
+After the second round of annotation, there will also be a <b>test set</b> available.
+As usual, the development of your system should not use the test set in any way, and you should only compute the test-set score after finalizing your system.
+<!--solution, we will send back your evaluation score on the test set.
+The students responsible for the highest test set score will be awarded a small prize.-->
+</p>
+
+<!--<p>
+If you have trouble downloading the <tt>tsv</tt> files, please get <a href="../../data/a3_final_data.zip">this zip file</a> instead.
+</p>-->
+
+<!--<p>
+<b>Reading the comments.</b>
+</p>
+
+<p>
+The function <code>tokenize</code> defined below can be used (optionally) to split
+a text into a list of <em>tokens</em>: words, numbers, groups of
+punctuation, URLs, hashtags, and usernames.
+</p>
+
+<pre>
+tokenize_re = re.compile(r'''
+                         \d+[:\.]\d+
+                         |(https?://)?(\w+\.)(\w{2,})+([\w/]+)
+                         |[@\#]?\w+(?:[-']\w+)*
+                         |[^a-zA-Z0-9 ]+''',
+                         re.VERBOSE)
+
+def tokenize(text):
+    return [ m.group() for m in tokenize_re.finditer(text) ]
+</pre>
+
+<p>
+<b>Processing features. Adding new features.</b>
+</p>
+
+<p>
+You might want to apply various kinds of normalization of the
+tokens to make your feature representation more robust. For instance,
+maybe it's better to convert all words to lowercase?
+Maybe you think that some useless features can be removed directly?
+</p>
+
+<p>
+Optionally, you may try to add some features from external
+sources. Here are a couple of ideas:
+</p>
+
+<p>
+  (1)
+  In text processing for social media, it can be useful to try to make
+  the features robust to variations in spelling.
+  One approach is to apply <em>word clustering</em>, which
+  finds groups of words that exhibit similar statistical properties.
+  <a href="http://www.cs.cmu.edu/~ark/TweetNLP/clusters/50mpaths2">Here</a>
+is a file containing word clusters computed using a very large set of tweets.
+The clusters were computed by Olutobi Owoputi and colleagues at Carnegie Mellon
+University, see the project page <a href="http://www.cs.cmu.edu/~ark/TweetNLP/">here</a>.
+To give you an impression, the cluster <code>1111100100110</code>
+  contains negatively loaded words such as <em>horrible</em>
+  and <em>terrible</em>, including several common misspellings, e.g. <em>embaressing</em>.
+</p>
+
+<p>
+  (2)
+You may try to create features based on <em>sentiment lexicons</em>.
+For instance, <a href="http://saifmohammad.com">Saif Mohammad</a> has created a lexicon
+  specifically designed for Twitter, which you can download <a href="http://saifmohammad.com/WebDocs/lexiconstoreleaseonsclpage/SemEval2015-English-Twitter-Lexicon.zip">here</a>.
+For instance, in this lexicon the word <em>woooohoooo</em> is listed
+  with the value 0.875, which means that it expresses a positive
+  emotion; the hashtag <code>#makesmesick</code> on the other hand is
+  listed with a negative value.
+  Another alternative might
+  be <a href="http://sentiwordnet.isti.cnr.it/">SentiWordNet</a>,
+  which also lists numerical values representing emotional values. In
+  both cases, you may need to decide what to do about the numbers if
+  you'd like to use them to create features.
+</p>
+
+<p>
+If you wonder about the formats of the cluster file or the sentiment
+lexicon, please ask the lab assistant.
+</p>-->
+
+&nbsp;
+<hr>
+&nbsp;
+  
+
+</body></html>
