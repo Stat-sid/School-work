@@ -2,7 +2,7 @@
 
 
 CREATE VIEW BasicInformation AS
-    SELECT Students.idnr, Students.name, Students.login, Students.program, COALESCE (StudentBranches.branch, 'noBranch') AS branch
+    SELECT Students.idnr, Students.name, Students.login, Students.program, COALESCE (StudentBranches.branch, NULL) AS branch
     FROM Students LEFT JOIN StudentBranches ON Students.idnr = StudentBranches.student;
 
 
@@ -28,22 +28,22 @@ SELECT w.student, w.course, 'waiting' AS status
 FROM waitingList AS w; 
 
 
-
 CREATE VIEW UnreadMandatory AS
 (SELECT s.idnr AS student, mp.course
-FROM MandatoryProgram AS mp, Students AS s 
+FROM MandatoryProgram AS mp, Students AS s WHERE s.program = mp.program 
 UNION
 SELECT s.idnr AS student, mb.course
 FROM MandatoryBranch AS mb, Students AS s)
 EXCEPT
-SELECT t.student, t.course
-FROM taken AS t, courses AS c WHERE code = course AND (grade != 'U' or null);
+SELECT DISTINCT p.student, p.course
+FROM passedCourses AS p, courses AS c;
+
 
 
 
 CREATE VIEW PathToGraduation AS
 WITH calculations AS (SELECT Students.idnr AS student,
-           SUM(DISTINCT Courses.credits) AS totalCredits,
+           COALESCE(SUM(DISTINCT Courses.credits), 0) AS totalCredits,
            COUNT(DISTINCT UnreadMandatory.course) AS mandatoryLeft,
            SUM(DISTINCT CASE WHEN Classified.classification = 'math' THEN Courses.credits ELSE 0 END) AS mathCredits,
            SUM(DISTINCT CASE WHEN Classified.classification = 'research' THEN Courses.credits ELSE 0 END) AS researchCredits,
@@ -63,4 +63,3 @@ WITH calculations AS (SELECT Students.idnr AS student,
     SELECT student, totalCredits, mandatoryLeft, mathCredits, researchCredits, seminarCourses,
 	(recCredits >= 10 AND mandatoryLeft = 0 AND mathCredits >= 20 AND researchCredits >= 10 AND seminarCourses >= 1) AS qualified
 	From calculations, calc;
-
