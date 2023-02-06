@@ -38,7 +38,7 @@ EXCEPT
 SELECT DISTINCT p.student, p.course
 FROM passedCourses AS p, courses AS c;
 
-
+DROP VIEW UnreadMandatory CASCADE;
 
 
 CREATE VIEW PathToGraduation AS
