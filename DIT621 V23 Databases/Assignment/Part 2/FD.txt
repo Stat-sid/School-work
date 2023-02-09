@@ -1,0 +1,50 @@
+D(studentIdnr, studentName, login, branchName, programName, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+
+studentIdnr -> studentName, login, branchName, programName
+login -> studentIdnr
+courseCode -> courseName, credits, departmentName, capacity, classification
+studentIdnr, courseCode -> grade, position
+
+
+The FD studentIdnr -> studentName, login, branchName, programName violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_2(studentIdnr, studentName, login, branchName, programName)
+D_3(studentIdnr, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+
+D_2 is in BCNF!
+
+The FD courseCode -> courseName, credits, departmentName, capacity, classification violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_3_1(courseCode, courseName, credits, departmentName, capacity, classification)
+D_3_2(studentIdnr, courseCode, grade, position)
+
+D_3_1 is in BCNF!
+D_3_2 is in BCNF!
+
+Final schema:
+D_2(studentIdnr, studentName, login, branchName, programName)
+D_3_1(courseCode, courseName, credits, departmentName, capacity, classification)
+D_3_2(studentIdnr, courseCode, grade, position)
+
+
+MVDs:
+courseCode ->> classification
+programName ->> departmentName
+branchName ->> programName
+
+D_3_1 also contains a MVD, hence is broken down to:
+
+D311(courseCode, classification)
+D312(courseCode, courseName, credits, departmentName, capacity)
+
+--D_2 also contains a MVD, hence is broken down to:
+
+D_2_1(branchName, programName)
+D_2_2(studentIdnr, studentName, login, programName)
+
+
+
+
+
+
+
