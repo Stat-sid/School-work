@@ -37,14 +37,7 @@ D_3_1 also contains a MVD, hence is broken down to:
 D311(courseCode, classification)
 D312(courseCode, courseName, credits, departmentName, capacity)
 
---D_2 also contains a MVD, hence is broken down to:
+D_2 also contains a MVD, hence is broken down to:
 
 D_2_1(branchName, programName)
 D_2_2(studentIdnr, studentName, login, programName)
-
-
-
-
-
-
-

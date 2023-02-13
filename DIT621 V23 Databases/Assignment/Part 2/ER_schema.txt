@@ -1,0 +1,4 @@
+-- idnr=national identification number (10 digits) 
+Students(idnr, name, login, program)
+
+Courses(courseCode, courseName, credits, departmentName)

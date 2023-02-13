@@ -1,0 +1,22 @@
+Department: represents a department in the university, with attributes Dept_ID, Dept_Name, and Dept_Abbreviation.
+
+Program: represents a program offered by the university, with attributes Program_ID, Program_Name, and Program_Abbreviation.
+
+Department_Program: represents the relationship between departments and programs, where several departments may collaborate on a program. It is a many-to-many relationship, with attributes Dept_ID and Program_ID.
+
+Branch: represents a branch of a program, with attributes Branch_ID, Branch_Name, and Program_ID.
+
+Mandatory_Course: represents the mandatory courses for each program and each branch, with attributes Mandatory_ID, Course_ID, and Branch_ID (NULL if the course is only mandatory for the program and not for any specific branch).
+
+Recommended_Course: represents the recommended courses for each branch, with attributes Recommended_ID, Branch_ID, and Course_ID.
+Student: represents a student in the university, with attributes Student_ID, Student_Name, and Program_ID.
+
+Branch_Student: represents the relationship between students and branches, where each student must choose a single branch within their program. It is a one-to-one relationship, with attributes Student_ID and Branch_ID.
+
+Course: represents a course offered by the university, with attributes Course_ID, Course_Name, Department_ID, Max_Capacity, Credit, and Course_Code.
+
+Course_Classification: represents the classification of courses as mathematical, research, or seminar, with attributes Classification_ID, Course_ID, and Classification_Type.
+
+Prerequisite: represents the prerequisites for each course, with attributes Prerequisite_ID and Course_ID.
+
+Student_Course: represents the relationship between students and courses, where students register for courses in order to read them. It has attributes Student_ID, Course_ID, Grade, and Wait_List_Order (NULL if the student is not on the waiting list).
