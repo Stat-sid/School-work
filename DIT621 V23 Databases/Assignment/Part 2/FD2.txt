@@ -1,0 +1,90 @@
+D(studentIdnr, studentName, login, branchName, programName, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+    
+                                                            
+login -> studentIdnr                                            
+departmentName -> courseCode                         
+studentIdnr -> studentName, login, branchName, programName                     
+courseCode ->  credits, departmentName, capacity
+studentIdnr, courseCode -> grade                                              
+studentIdnr, courseCode -> position
+position, coursecode -> studentIdnr                          
+                                                                                                      
+               
+The FD studentIdnr -> studentName, login, branchName, programName violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_2(studentIdnr, studentName, login, branchName, programName)
+D_3(studentIdnr, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+
+
+D_2 is in BCNF!
+
+
+The FD courseCode -> credits, departmentName, capacity violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_3_1(courseCode, credits, departmentName, capacity)
+D_3_2(studentIdnr,courseName, courseCode, grade, position, classification)
+
+
+D_3_1 is in BCNF!
+D_3_2 is not in BCNF!
+
+
+The FD studentIdnr, courseCode -> grade violates BCNF as the LHS is not superkey. Table D_3_2 is split into the two below:
+
+D_3_2_1(studentIdnr, courseCode, grade, position)
+D_3_2_2(studentIdnr, courseCode, courseName, classification)
+
+
+D_3_2_1 is in BCNF!
+D_3_2_2 is in BCNF!
+
+
+Final schema:
+D_2(studentIdnr, studentName, login, branchName, programName)
+D_3_1(courseCode, credits, departmentName, capacity)
+D_3_2_1(studentIdnr, courseCode, grade, position)
+D_3_2_2(studentIdnr, courseCode, courseName, classification)
+
+
+MVDs:                                -
+studentIdnr ->> courseCode  
+courseCode ->> classification
+
+D_3_2_2 is not in 4NF
+
+D_3_2_2_1(courseCode, classification)
+D_3_2_2_2(studentIdnr,coursename)                   
+
+
+D_3_2_1 is not in 4NF
+
+D_3_2_1_1(studentIdnr,courseCode,position)  
+D_3_2_1_2(studentIdnr, courseCode, grade)    
+
+                                                                          
+so in 4NF:
+D_2_1(login,studentIdnr)
+D_2_2(studentIdnr, studentName, branchName, programName)
+D_3_1(courseCode, credits, departmentName, capacity)
+D_3_2_2_1(courseCode, classification)
+D_3_2_2_2(studentIdnr,coursename)  
+D_3_2_1_1(studentIdnr,courseCode,position)  
+D_3_2_1_2(studentIdnr,courseCode,grade) 
+
+c d exactly one
+student branch atmost one   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
