@@ -1,0 +1,145 @@
+This file contains 2 of our current solution options below:
+
+______OPTION 1______:
+
+D(studentIdnr, studentName, login, branchName, programName, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+    
+                                                            
+login -> studentIdnr                                                                 
+studentIdnr -> studentName, login, branchName, programName
+courseCode -> courseName,capacity, credits, departmentName
+studentIdnr, courseCode -> grade
+studentIdnr, courseCode -> position
+position, coursecode -> studentIdnr                         
+                                                               
+               
+The FD login -> studentIdnr violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_2(studentIdnr, studentName, login, branchName, programName)
+D_3(login, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+
+
+D_2 is in BCNF!
+D_3 is not in BCNF!
+
+
+The FD courseCode,login --> position violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_3_1(courseCode, credits, coursename, departmentName, capacity, grade, position)
+D_3_2(login, courseCode, classification)
+
+
+D_3_1 is not in BCNF!
+D_3_2 is in BCNF!
+
+
+The FD courseCode --> courseName,credits,departmentName,capacity violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_3_1_1(courseCode,courseName,credits,departmentName,capacity)
+D_3_1_2(courseCode,login,position,grade)
+
+
+
+Final schema:
+
+D_2(login,studentIdnr,studentName,branchName,programName)
+D_3_2(login, courseCode, classification)
+D_3_1_1(courseCode,courseName,credits,departmentName,capacity)
+D_3_1_2(courseCode,login,position,grade) 
+
+
+
+MVDs:                                -
+studentIdnr ->> courseCode  
+courseCode ->> classification
+
+D_3_2 is not in 4NF
+
+D_3_2_1(courseCode, classification)
+D_3_2_2(login, coursecode)                   
+
+
+                                                                          
+so in 4NF:
+D_2(login,studentIdnr,studentName,branchName,programName)
+D_3_2_1(courseCode, classification)
+D_3_2_2(login, coursecode) 
+D_3_1_1(courseCode,courseName,credits,departmentName,capacity)
+D_3_1_2(courseCode,login,position,grade)
+
+
+______OPTION 2_______:
+
+D(studentIdnr, studentName, login, branchName, programName, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+    
+                                                            
+login -> studentIdnr                                                                 
+studentIdnr -> studentName, login, branchName, programName
+courseCode -> courseName,capacity, credits, departmentName, classification
+studentIdnr, courseCode -> grade
+studentIdnr, courseCode -> position
+position, coursecode -> studentIdnr                         
+                                                               
+               
+The FD login -> studentIdnr violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_2(studentIdnr, studentName, login, branchName, programName)
+D_3(login, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+
+
+D_2 is in BCNF!
+D_3 is not in BCNF!
+
+
+The FD courseCode -> credits, coursename, departmentName, capacity violates BCNF as the LHS is not superkey. Table is split into the two below:
+
+D_3_1(courseCode, credits, coursename, departmentName, capacity, classification)
+D_3_2(login,courseName, courseCode, grade, position)
+
+
+D_3_1 is in BCNF!
+D_3_2 is in BCNF!
+
+
+Final schema:
+
+D_2(login,studentIdnr,studentName,branchName,programName)
+D_3_1(courseCode,courseName,credits,departmentName,capacity,classification)
+D_3_2(login,courseCode,grade,position)
+
+
+MVDs:                                -
+studentIdnr ->> courseCode  
+courseCode ->> classification
+
+D_3_1 is not in 4NF
+
+D_3_1_1(courseCode, classification)
+D_3_1_2(courseName,credits,departmentName,capacity)                   
+
+
+                                                                          
+so in 4NF:
+D_2(login,studentIdnr,studentName,branchName,programName)
+D_3_1_1(courseCode, classification)
+D_3_1_2(courseName,credits,departmentName,capacity)     
+D_3_2(login,courseCode,grade,position)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
